@@ -1,0 +1,19 @@
+Software License Agreement
+
+IMPORTANT: PLEASE READ THIS SOFTWARE LICENSE AGREEMENT ("LICENSE") CAREFULLY BEFORE USING THE SOFTWARE. BY USING THE SOFTWARE, YOU ARE AGREEING TO BE BOUND BY THE TERMS OF THIS LICENSE.
+
+1. License: The software and any images, graphics, photographs, animation, video, audio, music and text incorporated therein (the "Software") is licensed, not sold, to you by ChocoRico. You own the media on which the Software is recorded, but Licensor retains ownership of the Software itself.
+
+2. Permitted Uses and Restrictions: This License allows you to install and use the Software on a single computer at a time. This License does not allow the Software to exist on more than one computer at a time. You may make one copy of the Software in machine-readable form for backup purposes only.
+
+3. Termination: This License is effective until terminated. Your rights under this License will terminate automatically without notice from Licensor if you fail to comply with any term(s) of this License.
+
+4. Disclaimer of Warranties: YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT USE OF THE SOFTWARE IS AT YOUR SOLE RISK. THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND.
+
+5. Limitation of Liability: IN NO EVENT WILL LICENSOR BE LIABLE FOR ANY DAMAGES, INCLUDING ANY LOST PROFITS, LOST SAVINGS, OR OTHER INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OR THE INABILITY TO USE THE SOFTWARE (EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF THESE DAMAGES), OR FOR ANY CLAIM BY ANY OTHER PARTY.
+
+6. Controlling Law and Severability: This License will be governed by and construed in accordance with the laws of JAPAN. If for any reason a court of competent jurisdiction finds any provision, or portion thereof, to be unenforceable, the remainder of this License shall continue in full force and effect.
+
+7. Users are solely responsible for any API leakage or other damage.
+
+BY USING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS LICENSE, UNDERSTAND IT AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
