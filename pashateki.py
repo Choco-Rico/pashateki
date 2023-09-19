@@ -7,6 +7,12 @@ from PIL import Image, ImageTk
 from google.cloud import vision
 from pystray import MenuItem as item
 
+def reset_and_restart():
+    print("An error occurred. Restarting the application...")
+    if mutex is not None:  # Mutexが存在する場合
+        win32api.CloseHandle(mutex) 
+    os.execl(sys.executable, sys.executable, *sys.argv)
+
 try:
     mutex = win32event.CreateMutex(None, 1, 'pashateki_SingleInstanceMutex')
     if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
@@ -142,11 +148,6 @@ try:
     icon_path = 'icon.ico'
     create_icon(icon_path)
 
-    def reset_and_restart():
-        print("An error occurred. Restarting the application...")
-        # 現在のPythonスクリプトを再起動
-        os.execl(sys.executable, sys.executable, *sys.argv)
-
     try:
         while True:
             time.sleep(1)  # メインスレッドが終了しないようにする
@@ -155,5 +156,4 @@ try:
         observer.join()
 
 except Exception as e:
-    print(f"An unexpected error occurred: {e}")
     reset_and_restart()
