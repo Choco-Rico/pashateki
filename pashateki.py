@@ -8,7 +8,7 @@ from google.cloud import vision
 from pystray import MenuItem as item
 
 def reset_and_restart():
-    print("An error occurred. Restarting the application...")
+    print("エラーが発生しました。アプリケーションを再起動します...")
     if mutex is not None:  # Mutexが存在する場合
         win32api.CloseHandle(mutex) 
     os.execl(sys.executable, sys.executable, *sys.argv)
@@ -17,13 +17,13 @@ try:
     mutex = win32event.CreateMutex(None, 1, 'pashateki_SingleInstanceMutex')
     if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
         mutex = None
-        print("Another instance is already running. Exiting.")
+        print("別のインスタンスがすでに実行中です。終了します。")
         sys.exit(0)
 
     def monitor_shutdown():
         def on_shutdown_handler(hwnd, msg, wparam, lparam):
             if msg == win32con.WM_QUERYENDSESSION:
-                print("Shutting down or restarting...")
+                print("シャットダウンまたは再起動中...")
                 shutdown_event.set()  # シャットダウンイベントを設定
                 return 0  # システムにシャットダウンを許可する
             return True
@@ -35,7 +35,11 @@ try:
     shutdown_thread.start()
 
     # Google Cloud Vision APIのクライアントを初期化
-    client = vision.ImageAnnotatorClient.from_service_account_file("GCP.json")
+    try:
+        client = vision.ImageAnnotatorClient.from_service_account_file("GCP.json")
+    except Exception as e:
+        print("Google Cloud Vision APIの初期化に失敗しました。エラー:", e)
+        reset_and_restart()
 
     # スクリーンショットの保存先ディレクトリ
     screenshot_dir = './sch'
@@ -45,22 +49,30 @@ try:
 
     def load_image(image_path):
         # 画像を読み込み、Google Vision APIに送信可能な形式に変換
-        with io.open(image_path, 'rb') as image_file:
-            content = image_file.read()
-        image = vision.Image(content=content)
-        return image
+        try:
+            with io.open(image_path, 'rb') as image_file:
+                content = image_file.read()
+            image = vision.Image(content=content)
+            return image
+        except Exception as e:
+            print("画像の読み込みに失敗しました。エラー:", e)
+            reset_and_restart()
 
     def extract_text(image):
-        response = client.document_text_detection(image=image) 
-        text_data = []
-        for page in response.full_text_annotation.pages:
-            for block in page.blocks:
-                for paragraph in block.paragraphs:
-                    for word in paragraph.words:
-                        word_text = ''.join([symbol.text for symbol in word.symbols])
-                        bounding_box = [(vertex.x, vertex.y) for vertex in word.bounding_box.vertices]
-                        text_data.append({"text": word_text, "bounding_box": bounding_box})
-        return text_data  # テキストデータとバウンディングボックスを返す
+        try:
+            response = client.document_text_detection(image=image) 
+            text_data = []
+            for page in response.full_text_annotation.pages:
+                for block in page.blocks:
+                    for paragraph in block.paragraphs:
+                        for word in paragraph.words:
+                            word_text = ''.join([symbol.text for symbol in word.symbols])
+                            bounding_box = [(vertex.x, vertex.y) for vertex in word.bounding_box.vertices]
+                            text_data.append({"text": word_text, "bounding_box": bounding_box})
+            return text_data  # テキストデータとバウンディングボックスを返す
+        except Exception as e:
+            print("テキストの抽出に失敗しました。エラー:", e)
+            reset_and_restart()
 
     def display_screenshot_and_text(image_path):
         global root  # グローバル変数rootを使用
@@ -86,7 +98,7 @@ try:
         image_label.pack(side='left')
         text_widget = tk.Text(root, wrap='word')
         text_widget.pack(side='right', fill='both', expand=True)  # テキストウィジェットをウィンドウに合わせて伸縮
-        
+
         text_data = extract_text(image)
         full_text = ""
         last_y = 0
@@ -141,9 +153,13 @@ try:
         os._exit(0)  # プログラムを強制終了
 
     def create_icon(icon_path):
-        image = Image.open(icon_path)
-        icon = pystray.Icon("name", image, "pashateki", menu=pystray.Menu(item('Quit', exit_app)))
-        icon.run()
+        try:
+            image = Image.open(icon_path)
+            icon = pystray.Icon("name", image, "pashateki", menu=pystray.Menu(item('Quit', exit_app)))
+            icon.run()
+        except Exception as e:
+            print("アイコンの作成に失敗しました。エラー:", e)
+            reset_and_restart()
 
     icon_path = 'icon.ico'
     create_icon(icon_path)
